@@ -74,10 +74,19 @@ def resolve_model_choice(model_files, choice):
         candidate = Path(choice)
         if not candidate.is_absolute():
             candidate = (PROJECT_DIR / choice).resolve()
-        if candidate.exists():
-            return candidate
 
-    raise ValueError("Invalid selection. Please choose a valid number or path.")
+        if candidate.exists() and candidate.suffix.lower() == ".pkl":
+            candidate = candidate.resolve()
+            for model_file in model_files:
+                if model_file.resolve() == candidate:
+                    return model_file
+
+            if candidate.name.endswith(".pkl"):
+                for model_file in model_files:
+                    if model_file.name == candidate.name:
+                        return model_file
+
+    raise ValueError("Invalid selection. Please choose a valid model number or a .pkl model path.")
 
 
 def choose_model(models_dir: Path, selection=None):
@@ -119,7 +128,9 @@ def choose_model(models_dir: Path, selection=None):
         return resolve_model_choice(model_files, str(selection))
 
     while True:
-        choice = input("\nSelect a model by number or enter a full path: ").strip()
+        print("\nSelect a model by number or enter a full path: ", end="")
+        sys.stdout.flush()
+        choice = input().strip()
         if not choice:
             print("No model selected.")
             continue
@@ -146,12 +157,14 @@ def select_model_path(models_dir: Path, default_model=None, choice=None, model_c
         print("1. Use the default model (model melanoma_stacking_safe_lr3e05_dw1e05)")
         print("2. Selected Model from the list")
         print("0. Return to the main menu")
-        choice = input("Choose an option (0-2): ").strip() or "1"
+        print("Choose an option (0-2): ", end="")
+        choice = input().strip() or "1"
 
     if choice == "1":
         return default_model
 
     if choice == "2":
+        print("\nSelect a model by number or enter a full path:", end="")
         return choose_model(models_dir, selection=model_choice)
 
     if choice == "0":
@@ -259,7 +272,9 @@ def get_image_path():
         print("Image file not found. Please enter a valid path.")
 
     while True:
-        image_path = input("Enter the image path (for example: data/test/malignant/melanoma_10128.jpg): ").strip()
+        print("\nEnter the image path (for example: data/test/malignant/melanoma_10128.jpg): ", end="")
+        sys.stdout.flush()
+        image_path = input().strip()
         if not image_path:
             print("No image path provided. Please try again.")
             continue
