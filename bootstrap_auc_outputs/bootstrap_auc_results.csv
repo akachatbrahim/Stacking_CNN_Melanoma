@@ -1,0 +1,5 @@
+Model,AUC (%),95% Bootstrap CI
+EfficientNetV2B0,97.40,96.55 – 98.13
+MobileNetV2,97.40,96.56 – 98.16
+DenseNet169,97.38,96.49 – 98.16
+Meta learner,97.74,96.90 – 98.45

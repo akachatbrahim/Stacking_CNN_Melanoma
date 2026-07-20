@@ -38,6 +38,10 @@ def show_menu():
     print("2. Generate the experimental results report.")
     print("3. Generate the performance plots and visualizations.")
     print("4. Image Diagnostic")
+    print("5. Run DeLong significance test")
+    print("6. Generate calibration curve and Brier score")
+    print("7. Generate Grad-CAM visualizations")
+    print("8. Run bootstrap AUC analysis")
     print("0. Exit")
     print("=" * 60)
 
@@ -91,7 +95,7 @@ def main():
 
         show_menu()
         try:
-            choice = input("Choose an option (0-4): ").strip()
+            choice = input("Choose an option (0-8): ").strip()
         except EOFError:
             print("\nNo input received. Exiting.")
             break
@@ -104,11 +108,19 @@ def main():
             handle_plotting_menu()
         elif choice == "4":
             run_script("image_prediction.py")
+        elif choice == "5":
+            run_script("test_delong.py")
+        elif choice == "6":
+            run_script("calibration_curve_brier.py")
+        elif choice == "7":
+            run_script("gradcam_stacking.py")
+        elif choice == "8":
+            run_script("bootstrap_auc.py")
         elif choice == "0":
             print("\nGoodbye!")
             break
         else:
-            print("\nInvalid choice. Please enter 0, 1, 2, 3, or 4.")
+            print("\nInvalid choice. Please enter 0, 1, 2, 3, 4, 5, 6, 7, or 8.")
 
         try:
             input("\nPress Enter to continue...")
